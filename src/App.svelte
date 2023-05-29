@@ -1,20 +1,58 @@
 <script lang="ts">
 	import ModeSwitcher from './ModeSwitcher.svelte';
 	import Tailwindcss from './Tailwindcss.svelte';
-	export let name: string;
+	import { get, type Readable } from 'svelte/store';
+    import { state } from './state';
+  	import List from './pages/List.svelte'
+    
+
+  function addStudent() {
+  
+    const newStudent = {
+      id:'777',
+      name: 'weebly',
+      age: 25,
+      major: 'Computer Science',
+      phone: '9098301022',
+      email: 'abacus@gmail.com',
+      score: 800,
+      registration_Date: '10/13/2022',
+      active: 'active'
+  };
+
+  // Update the store with the new student
+  state.update(students => {
+    students.push(newStudent);
+    return students;
+  });
+}
+  
+
+	function callback(arg0: any) {
+		throw new Error('Function not implemented.');
+	}
 </script>
 <style>
-	.custom-style {
-		@apply italic;
-	}
 </style>
 <Tailwindcss />
 <ModeSwitcher />
-<main class="p-4 mx-auto text-center max-w-xl">
-	<h1 class="uppercase text-6xl leading-normal font-thin text-svelte">Hello {name}!</h1>
-	<p class="custom-style mt-[3rem]">
-		Visit the
-		<a href="https://svelte.dev/tutorial" class="text-blue-500 underline">Svelte tutorial</a>
-		to learn how to build Svelte apps.
-	</p>
-</main>
+
+	<h2><strong>Reading the state</strong></h2>
+	<pre>State without get: {JSON.stringify(state)}</pre>
+	<pre>State with get: {JSON.stringify(get(state))}</pre>
+	
+	<hr />
+	<h2><strong>Updating the state</strong></h2>
+	
+	<button on:click={addStudent}>
+	  Add
+	</button>
+	
+	<ul>
+	  {#each $state.students as student}
+		<li>#{student.id}: {student.name}</li>
+	  {/each}
+	</ul>
+	
+	
+	<List />
